@@ -1,14 +1,7 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[1]:
-
-
 #
 # Importando bibliotecas necessarias
 # 
 
-import os
 import re
 import lxml
 from collections import OrderedDict
@@ -20,9 +13,6 @@ from bs4 import BeautifulSoup, SoupStrainer
 pd.set_option('display.max_columns', 10)
 
 
-# In[4]:
-
-
 #
 # Definindo funcoes auxiliares
 #
@@ -30,50 +20,23 @@ pd.set_option('display.max_columns', 10)
 def gera_url(ano, serie):
     """
     Gera url para raspagem de dados. 
-    
-    Input
-    -----
-    
-    ano : int 
-        Entre 2009 e 2017, inclusive
-        
-    serie : str 
-        'A' ou 'B'
-        
-    Output
-    ------
-    
-    url : str 
-        url de pagina com resultado de campeonato brasileiro.
     """
-    url = "https://pt.wikipedia.org/wiki/" +     "Resultados_do_primeiro_turno_do_Campeonato_Brasileiro_de_Futebol_de_" +     str(ano) +     "_-_S%C3%A9rie_" +     serie.upper()
+    url = "https://pt.wikipedia.org/wiki/" +\
+    "Resultados_do_primeiro_turno_do_Campeonato_Brasileiro_de_Futebol_de_" +\
+     str(ano) +\
+     "_-_S%C3%A9rie_" +\
+     serie.upper()
     return url
     
 def raspa_pagina_atual(web_driver, ano, serie):
     """ 
     Coleta dados sobre placares e informacoes adicionais sobre a partida da atual pagina.
-    
-    Input 
-    -----
-    
-    web_driver : selenium WebDriver
-        web_driver em pagina gerada por 'gera_url'
-    
-    ano : int 
-        Entre 2009 e 2017, inclusive
-        
-    serie : str
-        'A' ou 'B'
-        
-    Output
-    ------
-    
-    df_campeonato : pandas.DataFrame
-        DataFrame com resultados do campeonato atual em que o web_driver se encontra.
     """ 
     trainer = SoupStrainer('table', 
                            attrs = {'style':re.compile('width:100%;\\sbackground:\\stransparent[:alnum:]*')})
-    soup = BeautifulSoup(web_driver.page_source, 'lxml-xml', parse_only = trainer)
+    soup = BeautifulSoup(web_driver.page_source, 
+                         'lxml-xml', 
+                         parse_only = trainer)
     
     tabs_com_info = soup.find_all('table')
     
@@ -99,13 +62,25 @@ def raspa_pagina_atual(web_driver, ano, serie):
     return df_campeonato
 
 
-# In[5]:
+   
+#    
+# Coletando os dados. 
+#   Preciso ter o chromedriver ou outro driver compativel com o selenium
 
+wiki = webdriver.Chrome(executable_path = r'./chromedriver')
+todos = pd.DataFrame()
 
-get_ipython().run_cell_magic('time', '', "\n#\n# Coletando os dados. Preciso ter o chromedriver ou outro driver compativel com o selenium\n#\n\nwiki = webdriver.Chrome(executable_path = r'./chromedriver')\ntodos = pd.DataFrame()\n\n\n#\n# No wikipedia, ha informacao dos campeonatos brasileiros series A e B, de 2009 -> 2017.\n#\n\nseries = ['a','b']\nanos = range(2009, 2018)\ngrid = [(ano, serie) for ano in anos for serie in series]\n\nfor ano, serie in grid:\n    wiki.get(gera_url(ano, serie))\n    todos = todos.append(raspa_pagina_atual(wiki, ano, serie))\n    \nwiki.close()")
+# No wikipedia, ha informacao dos campeonatos brasileiros series A e B, de 2009 -> 2017.
 
+series = ['a','b']
+anos = range(2009, 2018)
+grid = [(ano, serie) for ano in anos for serie in series]
 
-# In[6]:
+for ano, serie in grid:
+    wiki.get(gera_url(ano, serie))
+    todos = todos.append(raspa_pagina_atual(wiki, ano, serie))
+    
+wiki.close()
 
 
 #
@@ -114,9 +89,6 @@ get_ipython().run_cell_magic('time', '', "\n#\n# Coletando os dados. Preciso ter
 
 todos = todos.reset_index().drop(columns=['index'])
 todos.head()
-
-
-# In[7]:
 
 
 #
