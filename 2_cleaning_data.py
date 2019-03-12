@@ -19,14 +19,23 @@ fwiki.head()
 
 # 
 # Limpeza:
-#   1) reescrever valores para adequar tipo das variaveis
-#   2) separar 'Placar' 
-#   3) separar 'Infos' em multiplas informacoes
+#   1) remover \xa0 de algumas colunas
+#   2) reescrever valores para adequar tipo das variaveis
+#   3) separar 'Placar' 
+#   4) separar 'Infos' em multiplas colunas
 #
 
 
 #
 # 1) 
+#
+
+fwiki['Mandante'], fwiki['Visitante'] = (
+        fwiki[['Mandante','Visitante']].
+        applymap(lambda x: x.replace('\xa0','')))
+
+#
+# 2) 
 # 
 
 # Ajeitando coluna Data e agregando ano para formar objeto datetime
@@ -66,7 +75,7 @@ fwiki = fwiki.assign(
 
 
 #
-# 2)
+# 3)
 #
 
 # Splitting Placar
@@ -91,7 +100,17 @@ fwiki['ResultadoMandante'] = (
         map(np.sign).
         map({-1: 'derrota', 0: 'empate', 1: 'derrota'}))
 
+
 #
-# 3)
+# 4)
 #
+
+info_names = ['Hora', 'GolsJogadorTimeA','Relatorio','GolsJogadorTimeB','Publico_Arbitro']
+
+
+infos_split = pd.DataFrame.from_dict(dict(zip(novas_infos, [x.split('\n\n') for x in fwiki['Infos']])))
+
+
+
+
 

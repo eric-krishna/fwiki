@@ -87,7 +87,7 @@ wiki.close()
 # Dados coletados:
 #
 
-todos = todos.reset_index().drop(columns=['index'])
+todos = todos.reset_index(drop=True)
 todos.head()
 
 
