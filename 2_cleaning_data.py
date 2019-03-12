@@ -105,12 +105,4 @@ fwiki['ResultadoMandante'] = (
 # 4)
 #
 
-info_names = ['Hora', 'GolsJogadorTimeA','Relatorio','GolsJogadorTimeB','Publico_Arbitro']
-
-
-infos_split = pd.DataFrame.from_dict(dict(zip(novas_infos, [x.split('\n\n') for x in fwiki['Infos']])))
-
-
-
-
 
