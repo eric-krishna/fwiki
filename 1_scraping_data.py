@@ -94,5 +94,5 @@ todos.head()
 #
 # Salvando para tratar a base coletada posteriormente.
 #
-todos.to_csv(r'./0_dados_wiki_brasileiro_raw.csv')
+todos.to_csv(r'./0_dados_wiki_brasileiro_raw.csv', index=False)
 
