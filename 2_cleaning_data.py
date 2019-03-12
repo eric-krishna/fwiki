@@ -15,9 +15,14 @@ fwiki.head()
 # 
 # Limpeza:
 #   1) reescrever valores para adequar tipo das variaveis
-#   2) separar 'Placar' e 'Infos' em multiplas informacoes
+#   2) separar 'Placar' 
+#   3) separar 'Infos' em multiplas informacoes
 #
 
+
+#
+# 1) 
+# 
 
 # Ajeitando coluna Data e agregando ano para formar objeto datetime
 fwiki.Data = (fwiki.Data
@@ -52,6 +57,11 @@ fwiki = fwiki.assign(
         )
 
 
+
+#
+# 2)
+#
+
 # Splitting Placar
 placar_split = [(re.sub(u'\u2013','-',x).
                  replace('-','').
@@ -66,4 +76,8 @@ fwiki = fwiki.assign(
 
 fwiki.drop(columns='Placar', inplace=True)
 
+
+#
+# 3)
+#
 
