@@ -1,5 +1,10 @@
+import os
 import re
+import numpy as np
 import pandas as pd
+
+os.chdir('./Dropbox/fwiki')
+pd.set_option('display.max_columns', 10)
 
 
 # 
@@ -25,10 +30,11 @@ fwiki.head()
 # 
 
 # Ajeitando coluna Data e agregando ano para formar objeto datetime
-fwiki.Data = (fwiki.Data
-              .str.replace(" de ", "-")
-              .str.replace("º", "")
-              .str.lower())
+fwiki['Data'] = (
+        fwiki['Data'].
+        str.replace(" de ", "-").
+        str.replace("º", "").
+        str.lower())
 
 trocar_mes = {'janeiro'  :'01',
               'fevereiro':'02',
@@ -43,17 +49,18 @@ trocar_mes = {'janeiro'  :'01',
               'novembro' :'11',
               'dezembro' :'12'}
 
+
 for mes, repl_mes in trocar_mes.items():
-    fwiki.Data = fwiki.Data.str.replace(mes, repl_mes)
+    fwiki['Data'] = fwiki['Data'].str.replace(mes, repl_mes)
     
-fwiki.Data = fwiki.apply(lambda x: x.Data + '-' + str(x.Ano), axis='columns')
-fwiki.Data = pd.to_datetime(fwiki.Data, format = "%d-%m-%Y")
+fwiki['Data'] = fwiki.apply(lambda x: x['Data'] + '-' + str(x['Ano']), axis='columns')
+fwiki['Data'] = pd.to_datetime(fwiki['Data'], format = "%d-%m-%Y")
 
 
 # Criando variaveis Mes e Dia para fins de analise exploratoria e modelagem
 fwiki = fwiki.assign(
-        Mes = [x.month for x in fwiki.Data],
-        Dia = [x.day for x in fwiki.Data]
+        Mes = [x.month for x in fwiki['Data']],
+        Dia = [x.day for x in fwiki['Data']]
         )
 
 
@@ -76,6 +83,13 @@ fwiki = fwiki.assign(
 
 fwiki.drop(columns='Placar', inplace=True)
 
+# Mandante ganhador ou nao
+
+fwiki['GolsDiff'] = fwiki.apply(lambda x: (x['GolsMandante'] - x['GolsVisitante']), axis='columns')
+fwiki['ResultadoMandante'] = (
+        fwiki['GolsDiff'].
+        map(np.sign).
+        map({-1: 'derrota', 0: 'empate', 1: 'derrota'}))
 
 #
 # 3)
