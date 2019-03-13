@@ -114,8 +114,10 @@ fwiki = fwiki.assign(
 
 fwiki['Hora'] = fwiki['Hora'].map(lambda x: datetime.strptime(x, '%H:%M').time())
 
-
 fwiki['Publico'] = fwiki['PublicoRenda'].map(lambda x: re.findall('(?<=^P.blico:)[0-9]+', x))
-fwiki['Publico'] = [int(x[0]) if len(x) > 0 else 0 for x in fwiki['Publico']]
+fwiki['Publico'] = [int(x[0]) if len(x) > 0 else np.nan for x in fwiki['Publico']]
 
-# fwiki['PublicoRenda'].map(lambda x: re.findall('(?<=^Renda:R\\$)[0-9]+\\.[0-9]{2}', x.replace(',','.')))
+fwiki['Renda'] = fwiki['PublicoRenda'].map(lambda x: re.findall('(?<=Renda:R\\$)[0-9]+\\.[0-9]{2}', x.replace(',','.')))
+fwiki['Renda'] = [float(x[0]) if len(x) > 0 else np.nan for x in fwiki['Renda']]
+
+fwiki.drop(columns=['Infos','PublicoRenda'], inplace=True)
