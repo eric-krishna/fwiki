@@ -1,5 +1,6 @@
 import os
 import re
+from datetime import datetime
 import numpy as np
 import pandas as pd
 
@@ -105,4 +106,16 @@ fwiki['ResultadoMandante'] = (
 # 4)
 #
 
+split_infos = [x.split('\n\n') for x in fwiki['Infos']]
 
+fwiki = fwiki.assign(
+        Hora = [x[0].replace('\n','') for x in split_infos],
+        PublicoRenda = [x[4].replace('.','').replace(' ','') for x in split_infos])
+
+fwiki['Hora'] = fwiki['Hora'].map(lambda x: datetime.strptime(x, '%H:%M').time())
+
+
+fwiki['Publico'] = fwiki['PublicoRenda'].map(lambda x: re.findall('(?<=^P.{1}blico:)[0-9]+', x))
+fwiki['Publico'] = [int(x[0]) if len(x) > 0 else 0 for x in fwiki['Publico']]
+
+# fwiki['PublicoRenda'].map(lambda x: re.findall('(?<=^Renda:R\\$)[0-9]+\\.[0-9]{2}', x.replace(',','.')))
