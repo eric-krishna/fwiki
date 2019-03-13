@@ -70,8 +70,7 @@ fwiki['Data'] = pd.to_datetime(fwiki['Data'], format = "%d-%m-%Y")
 # Criando variaveis Mes e Dia para fins de analise exploratoria e modelagem
 fwiki = fwiki.assign(
         Mes = [x.month for x in fwiki['Data']],
-        Dia = [x.day for x in fwiki['Data']]
-        )
+        Dia = [x.day for x in fwiki['Data']])
 
 
 
@@ -88,8 +87,7 @@ placar_split = [(re.sub(u'\u2013','-',x).
 # Atribuindo aa tabela
 fwiki = fwiki.assign(
         GolsMandante  = [int(x[0]) for x in placar_split],
-        GolsVisitante = [int(x[1]) for x in placar_split]
-        )
+        GolsVisitante = [int(x[1]) for x in placar_split])
 
 fwiki.drop(columns='Placar', inplace=True)
 
@@ -99,7 +97,7 @@ fwiki['GolsDiff'] = fwiki.apply(lambda x: (x['GolsMandante'] - x['GolsVisitante'
 fwiki['ResultadoMandante'] = (
         fwiki['GolsDiff'].
         map(np.sign).
-        map({-1: 'derrota', 0: 'empate', 1: 'derrota'}))
+        map({-1: 'derrota', 0: 'empate', 1: 'vitoria'}))
 
 
 #
@@ -121,3 +119,15 @@ fwiki['Renda'] = fwiki['PublicoRenda'].map(lambda x: re.findall('(?<=Renda:R\\$)
 fwiki['Renda'] = [float(x[0]) if len(x) > 0 else np.nan for x in fwiki['Renda']]
 
 fwiki.drop(columns=['Infos','PublicoRenda'], inplace=True)
+
+
+
+#
+# Tabela pronta
+#
+
+fwiki = fwiki[['Data','Ano','Serie','Campeonato','Estadio','Hora','Publico','Renda',
+               'Mandante','Visitante','GolsMandante','GolsVisitante',
+               'GolsDiff','ResultadoMandante']]
+
+fwiki.to_csv(r'./1_dados_wiki_brasileiro_clean.csv', index=False)
