@@ -115,7 +115,7 @@ fwiki = fwiki.assign(
 fwiki['Hora'] = fwiki['Hora'].map(lambda x: datetime.strptime(x, '%H:%M').time())
 
 
-fwiki['Publico'] = fwiki['PublicoRenda'].map(lambda x: re.findall('(?<=^P.{1}blico:)[0-9]+', x))
+fwiki['Publico'] = fwiki['PublicoRenda'].map(lambda x: re.findall('(?<=^P.blico:)[0-9]+', x))
 fwiki['Publico'] = [int(x[0]) if len(x) > 0 else 0 for x in fwiki['Publico']]
 
 # fwiki['PublicoRenda'].map(lambda x: re.findall('(?<=^Renda:R\\$)[0-9]+\\.[0-9]{2}', x.replace(',','.')))
