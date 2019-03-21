@@ -31,9 +31,9 @@ fwiki.head()
 # 1) 
 #
 
-fwiki['Mandante'], fwiki['Visitante'] = (
-        fwiki[['Mandante','Visitante']].
-        applymap(lambda x: x.replace('\xa0','')))
+fwiki['Mandante'] = fwiki['Mandante'].replace('\xa0','')
+fwiki['Visitante'] = fwiki['Visitante'].replace('\xa0','')
+
 
 #
 # 2) 
