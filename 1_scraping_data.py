@@ -33,7 +33,7 @@ def raspa_pagina_atual(web_driver, ano, serie):
     Coleta dados sobre placares e informacoes adicionais sobre a partida da atual pagina.
     """ 
     trainer = SoupStrainer('table', 
-                           attrs = {'style':re.compile('width:100%;\\sbackground:\\stransparent[:alnum:]*')})
+                           style = re.compile('width:100%;\\sbackground:\\stransparent.*'))
     soup = BeautifulSoup(web_driver.page_source, 
                          'lxml-xml', 
                          parse_only = trainer)
