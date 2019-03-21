@@ -126,7 +126,7 @@ fwiki.drop(columns=['Infos','PublicoRenda'], inplace=True)
 # Tabela pronta
 #
 
-fwiki = fwiki[['Data','Ano','Serie','Campeonato','Estadio','Hora','Publico','Renda',
+fwiki = fwiki[['Data','Ano','Mes', 'Dia', 'Serie','Campeonato','Estadio','Hora','Publico','Renda',
                'Mandante','Visitante','GolsMandante','GolsVisitante',
                'GolsDiff','ResultadoMandante']]
 
