@@ -4,7 +4,6 @@ from datetime import datetime
 import numpy as np
 import pandas as pd
 
-os.chdir('./Dropbox/fwiki')
 pd.set_option('display.max_columns', 10)
 
 
@@ -31,8 +30,8 @@ fwiki.head()
 # 1) 
 #
 
-fwiki['Mandante'] = fwiki['Mandante'].replace('\xa0','')
-fwiki['Visitante'] = fwiki['Visitante'].replace('\xa0','')
+fwiki['Mandante'] = fwiki['Mandante'].str.replace('\xa0','')
+fwiki['Visitante'] = fwiki['Visitante'].str.replace('\xa0','')
 
 
 #
