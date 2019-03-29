@@ -99,7 +99,7 @@ fwiki.drop(columns='Placar', inplace=True)
 
 # Mandante ganhador ou nao
 
-fwiki['GolsDiff'] = fwiki.apply(lambda x: (x['GolsMandante'] - x['GolsVisitante']), axis='columns')
+fwiki['GolsDiff'] = fwiki['GolsMandante'].values - fwiki['GolsVisitante'].values
 fwiki['ResultadoMandante'] = (
         fwiki['GolsDiff'].
         map(np.sign).
