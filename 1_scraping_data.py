@@ -45,10 +45,9 @@ def raspa_pagina_atual(web_driver, ano, serie):
     placares_names = ['Data','Mandante','Placar','Visitante','Estadio']
 
     placares_dict = OrderedDict()
-    ii = 0
+   
     for ii, zz in enumerate(placares):
         placares_dict[ii] = dict(zip(placares_names, placares[ii]))
-        ii += 1
 
     placares_df = pd.DataFrame.from_dict(placares_dict).transpose()
 
